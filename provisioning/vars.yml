@@ -1,0 +1,19 @@
+---
+project:
+    # Project settings
+    name: playground
+    domain_dev: playground.dev
+    
+    # Static and media files subdomains
+    domain_media_prefix: media
+    domain_static_prefix: static
+
+ntp_servers:
+  -  0.uk.pool.ntp.org
+  -  1.uk.pool.ntp.org
+  -  2.uk.pool.ntp.org
+  -  3.uk.pool.ntp.org
+
+epel:
+    repo: "http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-2.noarch.rpm"  
+    

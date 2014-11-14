@@ -1,0 +1,8 @@
+---
+- hosts: dbservers
+  sudo: true
+  roles:
+    - common
+    - db
+  vars_files:
+    - vars.yml
