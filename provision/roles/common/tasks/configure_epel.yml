@@ -1,0 +1,9 @@
+---
+    
+- name: Download EPEL repo
+  get_url: dest=/tmp/epel-release.rpm  url={{ epel_repo }}
+  sudo: true
+
+- name: Install EPEL repo
+  yum: pkg=/tmp/epel-release.rpm state=installed
+  sudo: true

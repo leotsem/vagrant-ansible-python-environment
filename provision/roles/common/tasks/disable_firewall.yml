@@ -1,0 +1,6 @@
+---
+    
+- name: Disable firewall
+  action: service name=firewalld state=stopped enabled=false
+  sudo: true
+  when: local

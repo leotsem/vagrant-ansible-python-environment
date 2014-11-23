@@ -1,4 +1,0 @@
----
-    - include: setup_python_env.yml
-    - include: setup_nginx.yml
-    - include: setup_git.yml

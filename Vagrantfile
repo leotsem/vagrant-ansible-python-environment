@@ -13,12 +13,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.synced_folder ".", "/data/www/playground"
   
   config.vm.provision "ansible" do |ansible|
-    ansible.playbook = "provisioning/vagrant.yml"
+    ansible.playbook = "provision/vagrant.yml"
     ansible.limit = "all"
-    ansible.groups = {
-      "webservers" => ["default"],
-      "dbservers" => ["default"],
-    }
   end
 
 end

@@ -1,0 +1,56 @@
+---
+
+- name: Download PostgreSQL repo
+  get_url: dest=/tmp/postgresql.rpm  url=http://yum.postgresql.org/9.3/redhat/rhel-6-x86_64/pgdg-centos93-9.3-1.noarch.rpm
+  sudo: true
+
+- name: Install PostgreSQL EPEL repo
+  yum: pkg=/tmp/postgresql.rpm state=installed
+  sudo: true
+
+- name: Install PostgreSQL and related packages
+  action: yum name={{ item }} state=present
+  with_items:
+    - postgresql93
+    - postgresql93-server
+    - postgresql93-devel 
+    - postgresql93-libs
+    - postgresql93-contrib 
+    - python-psycopg2
+  sudo: true
+
+- name: Init PostgreSQL DB
+  action: shell creates=/var/lib/pgsql/9.3/data/postgresql.conf /usr/pgsql-9.3/bin/postgresql93-setup initdb
+  sudo: true
+  notify:
+      - restart postgres
+
+- name: Allow PostgreSQL password authentication for local socket users
+  copy: src=pg_hba.conf dest=/var/lib/pgsql/9.3/data/pg_hba.conf force=yes
+  sudo: true
+  notify:
+      - restart postgres
+
+- name: Ensure the PostgreSQL service is running
+  service: name=postgresql-9.3 state=started enabled=yes
+  sudo: true
+
+- name: Ensure database is created
+  sudo: true
+  sudo_user: postgres
+  postgresql_db: name={{ project_name }}
+                 encoding='UTF-8'
+                 lc_collate='en_US.UTF-8'
+                 lc_ctype='en_US.UTF-8'
+                 template='template0'
+                 state=present
+  tags: postgresql
+
+- name: Ensure user has access to the database
+  sudo: true
+  sudo_user: postgres
+  postgresql_user: db={{ project_name }}
+                   name={{ project_name }}
+                   password={{ project_name }}
+                   priv=ALL
+                   state=present

@@ -1,0 +1,49 @@
+---
+
+- name: Install Python specific packages
+  action: yum name={{ item }} state=present
+  sudo: true
+  with_items:
+    - python-devel
+    - python-setuptools
+    - postgresql-devel
+  
+- name: Install virtualenv
+  sudo: true
+  easy_install: name=virtualenv
+  
+- name: Create virtualenv base directory
+  file: path=/data/env owner={{ project_user_username }} group={{ project_user_group }} state=directory
+  sudo: true
+  
+- name: Check if virtualenv for this project already exists
+  sudo: true
+  stat: path=/data/env/{{ project_name }}/bin/
+  register: venv_dir
+  
+- name: Create virtualenv if needed
+  command: virtualenv /data/env/{{ project_name }} --no-site-packages
+           creates=/data/env/{{ project_name }}/bin/activate
+  when: venv_dir.stat.isdir is not defined
+  sudo: true
+  sudo_user: "{{ project_user_username }}"
+
+- name: Ensure virtualenv folder is owned by the application user
+  sudo: true
+  file: path=/data/env/ owner={{ project_user_username }} group={{ project_user_group }} state=directory recurse=yes
+
+- name: Check if requirements file exists
+  stat: path=/data/www/{{ project_name }}/requirements.txt
+  register: requirements_file
+  sudo: true
+  sudo_user: "{{ project_user_username }}"
+
+- name: Install project requirements
+  pip: requirements=/data/www/{{ project_name }}/requirements.txt virtualenv=/data/env/{{ project_name }}
+  when: requirements_file.stat.exists
+  sudo: true
+  sudo_user: "{{ project_user_username }}"
+  
+- name: Ensure data folder is owned by the application user
+  sudo: true
+  file: path=/data/www/ owner={{ project_user_username }} group={{ project_user_group }} state=directory recurse=yes

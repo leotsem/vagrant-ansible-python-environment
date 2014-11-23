@@ -1,0 +1,19 @@
+---
+
+- name: Install nginx
+  yum: name=nginx state=latest
+  sudo: true
+
+- name: Ensure nginx is running
+  service: name=nginx state=started enabled=true
+  sudo: true
+
+- name: Copy nginx configuration
+  template: src=nginx.conf.j2 dest=/etc/nginx/conf.d/{{ project_name }}.conf
+  sudo: true
+  notify: restart nginx
+
+- name: set SELinux to permissive
+  action: selinux policy=targeted state=permissive
+  sudo: true
+  when: local

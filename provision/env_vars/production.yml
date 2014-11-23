@@ -1,0 +1,11 @@
+---
+
+project_name: playground
+project_domain: playground.com
+project_static_path: /data/www/playground/static/
+
+project_user_username: playground
+project_user_password: $1$SomeSalt$/jbIwfYCu0MxPBND2EtRH. # Password is: "password". created with: python -c 'import crypt; print crypt.crypt("password", "$1$SomeSalt$")'
+project_user_group: playground
+
+local: false

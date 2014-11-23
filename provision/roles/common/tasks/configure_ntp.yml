@@ -1,0 +1,15 @@
+---
+    
+- name: Install NTP
+  yum: pkg=ntp state=installed
+  sudo: true
+      
+- name: Config NTP
+  template: src=ntp.conf.j2 dest=/etc/ntp.conf
+  sudo: true
+  notify:
+      - restart ntpd
+      
+- name: Make sure NTP is started up
+  service: name=ntpd state=started enabled=yes
+  sudo: true

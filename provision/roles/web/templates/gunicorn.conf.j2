@@ -1,0 +1,6 @@
+command = '/data/env/{{ project_name }}/bin/gunicorn'
+pythonpath = '/data/env/{{ project_name }}'
+bind = '127.0.0.1:8000'
+workers = 3
+user = '{{ project_user_username }}'
+redirect_stderr=True

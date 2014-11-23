@@ -1,0 +1,16 @@
+---
+
+- name: Create application user
+  user: name={{ project_user_username }} password={{ project_user_password }} state=present
+  sudo: true
+  when: not local
+
+- name: Create application group
+  group: name={{ project_user_group }} system=yes state=present
+  sudo: true
+  when: not local
+
+- name: Add application user to application group and sudoers
+  user: name={{ project_user_username }} groups=wheel,{{ project_user_group }} state=present
+  sudo: true
+  when: not local
