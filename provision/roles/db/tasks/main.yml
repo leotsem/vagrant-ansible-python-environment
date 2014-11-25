@@ -52,5 +52,6 @@
   postgresql_user: db={{ project_name }}
                    name={{ project_name }}
                    password={{ project_name }}
+                   role_attr_flags=SUPERUSER
                    priv=ALL
                    state=present
