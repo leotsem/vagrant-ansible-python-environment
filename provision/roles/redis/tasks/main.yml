@@ -1,0 +1,9 @@
+---
+
+- name: Install redis
+  yum: name=redis state=latest
+  sudo: true
+  
+- name: Ensure redis is running
+  service: name=redis state=started enabled=true
+  sudo: true
